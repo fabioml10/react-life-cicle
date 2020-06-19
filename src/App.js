@@ -1,44 +1,35 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Users from './components/Users/UsersHooks';
 import Toggle from './components/Toggle/ToggleFuncional';
 
-export default class App extends Component {
+export default function App() {
 
-  constructor() {
-    super()
-    this.state = {
-      users: [],
-      showUsers: false
+  const [users, setUsers] = useState([])
+  const [showUsers, setShowUsers] = useState(false)
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await fetch('https://randomuser.me/api/?seed=rush&nat=br&results=10')
+      const json = await res.json();
+      setUsers(json.results)
     }
+
+    fetchUsers()
+
+  }, [])
+
+  const handleShowUsers = (isChecked) => {
+    setShowUsers(isChecked)
   }
 
-  async componentDidMount() {
-    console.log("Component Did Mount")
-    const res = await fetch(
-      'https://randomuser.me/api/?seed=rush&nat=br&results=10'
-    )
-    const json = await res.json();
-
-    this.setState({
-      users: json.results
-    })
-  }
-
-  handleShowUsers = (isChecked) => {
-    this.setState({
-      showUsers: isChecked
-    })
-  }
-  render() {
-    const { users, showUsers } = this.state
-    return (
+  return (
+    <div>
+      <Toggle label="Mostrar usuários" enabled={showUsers} onToggle={handleShowUsers} />
+      <hr />
       <div>
-        <Toggle label="Mostrar usuários" enabled={showUsers} onToggle={this.handleShowUsers} />
-        <hr />
-        <div>
-          {showUsers && <Users users={users} />}
-        </div>
+        {showUsers && <Users users={users} />}
       </div>
-    );
-  }
+    </div>
+  );
+
 }

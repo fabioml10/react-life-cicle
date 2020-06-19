@@ -14,12 +14,11 @@ export default function Users({ users }) {
     return () => {
       clearInterval(interval)
     }
-  }, [secondsVisible])
+  }, [secondsVisible]) //informar elementos que deve ser monitorados, ou seja, quando mudarem o metodo effect roda novamente
 
   return (
     <div>
       <p>Componente visivel por {secondsVisible} segundos.</p>
-
       <div className="row">
         <ul>
           {users.map(({ name, picture }, index) => <li key={index}><Card image={picture.large} firstname={name.first} lastname={name.last} /></li>)}
